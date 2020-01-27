@@ -6,7 +6,7 @@ public class IncidenceMatrix {
 
 
     private List<String> files;
-    private Map<String, List<Boolean>> matrix = new TreeMap<>();
+    private Map<String, List<Boolean>> matrix = new HashMap<>();
 
     public IncidenceMatrix(List<String> files) {
         this.files = new ArrayList<>(files);
