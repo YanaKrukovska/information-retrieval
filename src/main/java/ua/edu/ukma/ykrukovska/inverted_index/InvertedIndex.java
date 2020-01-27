@@ -5,7 +5,7 @@ import java.util.*;
 public class InvertedIndex {
 
     private List<String> files;
-    private Map<String, Map<String, List<Integer>>> invertedIndex = new HashMap<>();
+    private Map<String, Map<String, List<Integer>>> invertedIndex = new TreeMap<>();
 
 
     public InvertedIndex(List<String> files) {

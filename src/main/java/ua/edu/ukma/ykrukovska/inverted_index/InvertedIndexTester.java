@@ -12,8 +12,7 @@ public class InvertedIndexTester {
 
     public static void main(String[] args) {
         InvertedIndexBuilder invertedIndex = new InvertedIndexBuilder();
-       // InvertedIndexWriter.writeInvertedIndex(invertedIndex.createCollection(Arrays.asList(BOOK_PATH + "Test1.fb2", BOOK_PATH + "Test2.fb2")), RESUlT_PATH);
-        InvertedIndexWriter.writeInvertedIndex(invertedIndex.createCollection(Arrays.asList(BOOK_PATH + "harrypotter1.fb2", BOOK_PATH + "harrypotter1.fb2",
+        InvertedIndexWriter.writeInvertedIndex(invertedIndex.createCollection(Arrays.asList(BOOK_PATH + "harrypotter1.fb2", BOOK_PATH + "PrideAndPrejudice.fb2",
                 BOOK_PATH + "MonteCristo.fb2", BOOK_PATH + "DorianGray.fb2", BOOK_PATH + "JourneyEarth.fb2",
                 BOOK_PATH + "TreasureIsland.fb2", BOOK_PATH + "AliceWonderland.fb2",
                 BOOK_PATH + "GulliversTravels.fb2", BOOK_PATH + "CallOfWild.fb2", BOOK_PATH + "GrimmsFairyTales.fb2")), RESUlT_PATH);
