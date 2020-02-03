@@ -2,14 +2,14 @@ package ua.edu.ukma.ykrukovska;
 
 import ua.edu.ukma.ykrukovska.incidence_matrix.IncidenceMatrix;
 
+import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class BooleanSearcher {
 
-
     private IncidenceMatrix incidenceMatrix;
-
 
     public BooleanSearcher(IncidenceMatrix incidenceMatrix) {
         this.incidenceMatrix = incidenceMatrix;
@@ -19,17 +19,31 @@ public class BooleanSearcher {
         return input.split(" ");
     }
 
+
     public List<Integer> identifyOperator(String input) {
 
-        switch (splitQuery(input)[1].toLowerCase()) {
-            case "and":
-                return findTwoWords(splitQuery(input)[0].toLowerCase(), splitQuery(input)[2].toLowerCase());
-            case "or":
-                return findOneWordOrAnother(splitQuery(input)[0].toLowerCase(), splitQuery(input)[2].toLowerCase());
-            case "not":
-                return findOneWordWithoutAnother(splitQuery(input)[0].toLowerCase(), splitQuery(input)[2].toLowerCase());
+        String[] splitQueryResult = splitQuery(input);
+        ArrayDeque<String> queue = new ArrayDeque<>(Arrays.asList(splitQueryResult));
+
+        String word1 = queue.pop();
+        List<Integer> result = findWord(word1);
+
+        while (!queue.isEmpty()) {
+            switch (queue.pop().toLowerCase()) {
+                case "and":
+                    result = findTwoInOne(result, findWord(queue.pop()));
+                    break;
+                case "or":
+                    result = findOneOrAnother(result, findWord(queue.pop()));
+                    break;
+                case "not":
+                    result = findOneWordWithoutAnother(result, findWord(queue.pop()));
+                    break;
+
+            }
         }
-        return null;
+
+        return result;
     }
 
     public List<Integer> findWord(String word) {
@@ -44,57 +58,42 @@ public class BooleanSearcher {
                 result.add(i);
             }
         }
-
         return result;
     }
 
-    public List<Integer> findTwoWords(String word1, String word2) {
 
-        List<Integer> wordList1 = findWord(word1);
-        List<Integer> wordList2 = findWord(word2);
+    public List<Integer> findTwoInOne(List<Integer> wordList1, List<Integer> wordList2) {
         List<Integer> result = new LinkedList<>();
-
         if (wordList1.size() > wordList2.size()) {
-            for (int i = 0; i < wordList1.size(); i++) {
-                if (wordList2.contains(wordList1.get(i))) {
-                    result.add(i);
+            for (Integer wordList1Element : wordList1) {
+                if (wordList2.contains(wordList1Element)) {
+                    result.add(wordList1Element);
                 }
             }
         } else {
-            for (int i = 0; i < wordList2.size(); i++) {
-                if (wordList1.contains(wordList2.get(i))) {
-                    result.add(i);
+            for (Integer wordList2Element : wordList2) {
+                if (wordList1.contains(wordList2Element)) {
+                    result.add(wordList2Element);
                 }
             }
         }
-
-
         return result;
     }
 
-
-    public List<Integer> findOneWordWithoutAnother(String wordToKeep, String wordToExclude) {
-
-        List<Integer> wordToKeepList = findWord(wordToKeep);
-        List<Integer> wordToExcludeList = findWord(wordToExclude);
+    public List<Integer> findOneWordWithoutAnother(List<Integer> wordToKeepList, List<Integer> wordToExcludeList) {
 
         for (Integer value : wordToExcludeList) {
             wordToKeepList.remove(value);
         }
-
         return wordToKeepList;
     }
 
-    public List<Integer> findOneWordOrAnother(String word1, String word2) {
-        List<Integer> wordList1 = findWord(word1);
-        List<Integer> wordList2 = findWord(word2);
-        List<Integer> result = new LinkedList<>(wordList1);
 
+    public List<Integer> findOneOrAnother(List<Integer> wordList1, List<Integer> wordList2) {
         for (Integer value : wordList2) {
             if (!wordList1.contains(value))
-                result.add(value);
+                wordList1.add(value);
         }
-
-        return result;
+        return wordList1;
     }
 }

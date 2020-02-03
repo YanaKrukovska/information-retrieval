@@ -58,7 +58,7 @@ public class BooleanSearchTest {
 
         List<Integer> resultsList = new LinkedList<>();
         resultsList.add(1);
-        Assert.assertEquals(resultsList, booleanSearcher.findTwoWords("dog", "cat"));
+        Assert.assertEquals(resultsList, booleanSearcher.findTwoInOne(booleanSearcher.findWord("dog"), booleanSearcher.findWord("cat")));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class BooleanSearchTest {
         List<Integer> resultsList = new LinkedList<>();
         resultsList.add(1);
         resultsList.add(2);
-        Assert.assertEquals(resultsList, booleanSearcher.findTwoWords("dog", "cat"));
+        Assert.assertEquals(resultsList,  booleanSearcher.findTwoInOne(booleanSearcher.findWord("dog"), booleanSearcher.findWord("cat")));
     }
 
 
@@ -96,7 +96,7 @@ public class BooleanSearchTest {
 
         List<Integer> resultsList = new LinkedList<>();
         resultsList.add(0);
-        Assert.assertEquals(resultsList, booleanSearcher.findOneWordWithoutAnother("cat", "dog"));
+        Assert.assertEquals(resultsList, booleanSearcher.findOneWordWithoutAnother(booleanSearcher.findWord("cat"), booleanSearcher.findWord("dog")));
     }
 
 
@@ -117,7 +117,7 @@ public class BooleanSearchTest {
         List<Integer> resultsList = new LinkedList<>();
         resultsList.add(0);
         resultsList.add(3);
-        Assert.assertEquals(resultsList, booleanSearcher.findOneWordWithoutAnother("cat", "dog"));
+        Assert.assertEquals(resultsList, booleanSearcher.findOneWordWithoutAnother(booleanSearcher.findWord("cat"), booleanSearcher.findWord("dog")));
     }
 
 
@@ -141,7 +141,7 @@ public class BooleanSearchTest {
         resultsList.add(0);
         resultsList.add(1);
         resultsList.add(3);
-        Assert.assertEquals(resultsList, booleanSearcher.findOneWordWithoutAnother("cat", "mouse"));
+        Assert.assertEquals(resultsList, booleanSearcher.findOneWordWithoutAnother(booleanSearcher.findWord("cat"), booleanSearcher.findWord("mouse")));
     }
 
     @Test
@@ -162,7 +162,7 @@ public class BooleanSearchTest {
 
         List<Integer> resultsList = new LinkedList<>();
         resultsList.add(1);
-        Assert.assertEquals(resultsList, booleanSearcher.findOneWordWithoutAnother("horse", "mouse"));
+        Assert.assertEquals(resultsList, booleanSearcher.findOneWordWithoutAnother(booleanSearcher.findWord("horse"), booleanSearcher.findWord("mouse")));
     }
 
 
@@ -184,7 +184,7 @@ public class BooleanSearchTest {
 
         List<Integer> resultsList = new LinkedList<>();
         resultsList.add(4);
-        Assert.assertEquals(resultsList, booleanSearcher.findOneWordWithoutAnother("mouse", "cat"));
+        Assert.assertEquals(resultsList, booleanSearcher.findOneWordWithoutAnother(booleanSearcher.findWord("mouse"), booleanSearcher.findWord("cat")));
     }
 
     @Test
@@ -201,7 +201,7 @@ public class BooleanSearchTest {
         resultsList.add(0);
         resultsList.add(1);
         resultsList.add(2);
-        Assert.assertEquals(resultsList, booleanSearcher.findOneWordOrAnother("cat", "dog"));
+        Assert.assertEquals(resultsList, booleanSearcher.findOneOrAnother(booleanSearcher.findWord("cat"), booleanSearcher.findWord("dog")));
     }
 
     @Test
@@ -221,8 +221,129 @@ public class BooleanSearchTest {
         resultsList.add(0);
         resultsList.add(1);
         resultsList.add(2);
-        Assert.assertEquals(resultsList, booleanSearcher.findOneWordOrAnother("cat", "dog"));
+        Assert.assertEquals(resultsList, booleanSearcher.findOneOrAnother(booleanSearcher.findWord("cat"), booleanSearcher.findWord("dog")));
     }
 
+
+    @Test
+    public void doSearchNOT() {
+
+        IncidenceMatrix matrix = new IncidenceMatrix(Arrays.asList("0", "1", "2", "3"));
+        matrix.add("cat", "0");
+        matrix.add("cat", "1");
+        matrix.add("cat", "2");
+
+        matrix.add("dog", "1");
+        matrix.add("dog", "2");
+        matrix.add("mouse", "2");
+        matrix.add("mouse", "3");
+
+        BooleanSearcher booleanSearcher = new BooleanSearcher(matrix);
+
+        List<Integer> resultsList = new LinkedList<>();
+        resultsList.add(1);
+        Assert.assertEquals(resultsList, booleanSearcher.identifyOperator("cat and dog not mouse"));
+
+    }
+
+    @Test
+    public void doSearchOR() {
+
+        IncidenceMatrix matrix = new IncidenceMatrix(Arrays.asList("0", "1", "2", "3"));
+        matrix.add("cat", "0");
+        matrix.add("cat", "1");
+        matrix.add("cat", "2");
+
+        matrix.add("dog", "1");
+        matrix.add("dog", "2");
+        matrix.add("mouse", "2");
+        matrix.add("mouse", "3");
+
+        BooleanSearcher booleanSearcher = new BooleanSearcher(matrix);
+
+        List<Integer> resultsList = new LinkedList<>();
+        resultsList.add(1);
+        resultsList.add(2);
+        resultsList.add(3);
+        Assert.assertEquals(resultsList, booleanSearcher.identifyOperator("cat and dog or mouse"));
+
+    }
+
+    @Test
+    public void doSearchAND() {
+
+        IncidenceMatrix matrix = new IncidenceMatrix(Arrays.asList("0", "1", "2", "3", "4"));
+
+        matrix.add("cat", "0");
+        matrix.add("cat", "1");
+        matrix.add("cat", "2");
+
+        matrix.add("dog", "1");
+        matrix.add("dog", "2");
+        matrix.add("mouse", "2");
+
+        BooleanSearcher booleanSearcher = new BooleanSearcher(matrix);
+
+        List<Integer> resultsList = new LinkedList<>();
+        resultsList.add(2);
+        Assert.assertEquals(resultsList, booleanSearcher.identifyOperator("cat and dog and mouse"));
+
+    }
+
+    @Test
+    public void doSearchLong() {
+
+        IncidenceMatrix matrix = new IncidenceMatrix(Arrays.asList("0", "1", "2", "3", "4"));
+
+        matrix.add("cat", "0");
+        matrix.add("cat", "1");
+        matrix.add("cat", "2");
+
+        matrix.add("dog", "1");
+        matrix.add("dog", "2");
+
+        matrix.add("mouse", "2");
+        matrix.add("mouse", "4");
+
+        matrix.add("horse", "2");
+
+        BooleanSearcher booleanSearcher = new BooleanSearcher(matrix);
+
+        List<Integer> resultsList = new LinkedList<>();
+        resultsList.add(1);
+        resultsList.add(4);
+        Assert.assertEquals(resultsList, booleanSearcher.identifyOperator("cat and dog or mouse not horse"));
+
+    }
+
+
+    @Test
+    public void doSearchLong2() {
+
+        IncidenceMatrix matrix = new IncidenceMatrix(Arrays.asList("0", "1", "2", "3", "4", "5"));
+
+        matrix.add("cat", "0");
+        matrix.add("cat", "1");
+        matrix.add("cat", "2");
+        matrix.add("cat", "3");
+        matrix.add("cat", "4");
+
+        matrix.add("dog", "1");
+        matrix.add("dog", "2");
+
+        matrix.add("mouse", "2");
+        matrix.add("mouse", "4");
+
+        matrix.add("horse", "5");
+
+        BooleanSearcher booleanSearcher = new BooleanSearcher(matrix);
+
+        List<Integer> resultsList = new LinkedList<>();
+        resultsList.add(0);
+        resultsList.add(3);
+        resultsList.add(5);
+        Assert.assertEquals(resultsList, booleanSearcher.identifyOperator("cat not dog not mouse or horse"));
+
+    }
 
 }
