@@ -67,7 +67,7 @@ public class DictionaryArray implements Dictionary {
     }
 
     @Override
-    public String[] getDictionaryWords() {
+    public Object[] getDictionaryWords() {
         return dictionaryWords;
     }
 }

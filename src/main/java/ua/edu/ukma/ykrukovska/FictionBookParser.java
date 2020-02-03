@@ -50,7 +50,8 @@ public class FictionBookParser {
         public void endElement(String uri, String localName, String qName) throws SAXException {
             switch (qName) {
                 case PARAGRAPH:
-                    String[] splitWords = elementValue.split("\\W+");
+                  //  String[] splitWords = elementValue.split("[^a-zA-Zа-яА-ЯіІєЄїЇёЁ0-9'\\+-]+[^a-zA-Zа-яА-ЯіІєЄїЇёЁ]*");
+                    String[] splitWords = elementValue.split("[^a-zA-Zа-яА-ЯіІєЄїЇёЁ]+");
                     words.addAll(Arrays.asList(splitWords));
                     break;
             }

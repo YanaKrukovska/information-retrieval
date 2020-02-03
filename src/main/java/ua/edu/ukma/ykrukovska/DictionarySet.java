@@ -34,7 +34,7 @@ public class DictionarySet implements Dictionary {
     }
 
     @Override
-    public String[] getDictionaryWords() {
-        return (String[]) words.toArray();
+    public Object[] getDictionaryWords() {
+        return words.toArray();
     }
 }

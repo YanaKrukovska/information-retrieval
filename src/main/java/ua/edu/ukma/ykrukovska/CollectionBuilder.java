@@ -14,7 +14,8 @@ public class CollectionBuilder {
         Collection collection = new Collection();
 
 
-        Dictionary dictionary = new DictionaryArray();
+     //  Dictionary dictionary = new DictionaryArray();
+        Dictionary dictionary = new DictionarySet();
         for (String fileName : files) {
             try {
                 FictionBookParser fictionBookParser = new FictionBookParser(fileName);

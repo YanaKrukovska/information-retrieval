@@ -9,5 +9,5 @@ public interface Dictionary {
 
     int getWordsCount();
 
-    String[] getDictionaryWords();
+    Object[] getDictionaryWords();
 }

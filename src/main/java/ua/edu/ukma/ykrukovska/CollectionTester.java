@@ -9,7 +9,7 @@ public class CollectionTester {
 
 
     private static final String BOOK_PATH = "D://Studying//InfortmationRetrieval//fb2//";
-    private static final String RESULT = "D://Studying//InfortmationRetrieval//results.txt";
+    private static final String RESULT = "D://Studying//InfortmationRetrieval//DictionaryResult.txt";
 
     public static void main(String[] args) {
 
