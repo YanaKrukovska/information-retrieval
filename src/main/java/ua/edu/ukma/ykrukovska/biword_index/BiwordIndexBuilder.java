@@ -19,13 +19,16 @@ public class BiwordIndexBuilder {
                 FictionBookParser fictionBookParser = new FictionBookParser(fileName);
                 List<String> wordList = fictionBookParser.getWordList();
 
-                if (wordList.size() > 2) {
+                if (wordList.size() > 1) {
                     int i = 0;
                     do {
                         String phrase = wordList.get(i).toLowerCase() + " " + wordList.get(++i).toLowerCase();
                         biwordIndex.add(fileName, phrase);
                     } while (i < wordList.size() - 1);
+                } else {
+                    biwordIndex.add(fileName, wordList.get(0));
                 }
+                System.out.println("DONE " + fileName);
 
             } catch (ParserConfigurationException | SAXException | IOException e) {
                 e.printStackTrace();
