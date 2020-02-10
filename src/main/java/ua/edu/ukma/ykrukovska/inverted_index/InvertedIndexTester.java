@@ -10,8 +10,7 @@ public class InvertedIndexTester {
 
 
     public static void main(String[] args) {
-        InvertedIndexBuilder invertedIndexBuilder = new InvertedIndexBuilder();
-        InvertedIndex invertedIndex = invertedIndexBuilder.createCollection(FILES);
+        InvertedIndex invertedIndex = InvertedIndexBuilder.createCollection(FILES);
 
         InvertedIndexWriter.writeInvertedIndex(invertedIndex, RESULT_PATH + "InvertedIndexResult.txt");
 

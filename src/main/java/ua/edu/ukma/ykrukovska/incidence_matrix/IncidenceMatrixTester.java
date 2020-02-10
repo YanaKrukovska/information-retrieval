@@ -12,8 +12,7 @@ public class IncidenceMatrixTester {
 
 
     public static void main(String[] args) {
-        IncidenceMatrixBuilder matrixBuilder = new IncidenceMatrixBuilder();
-        IncidenceMatrix matrix = matrixBuilder.createCollection(FILES);
+        IncidenceMatrix matrix = IncidenceMatrixBuilder.createCollection(FILES);
 
         IncidenceMatrixWriter.writeMatrix(matrix, RESULT_PATH + "MatrixResult.txt");
 

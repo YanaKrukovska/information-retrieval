@@ -11,7 +11,10 @@ import java.util.List;
 
 public class InvertedIndexBuilder {
 
-    public InvertedIndex createCollection(List<String> files) {
+    private InvertedIndexBuilder() {
+    }
+
+    public static InvertedIndex createCollection(List<String> files) {
 
         InvertedIndex invertedIndex = new InvertedIndex(files);
 

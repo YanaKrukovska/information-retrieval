@@ -11,8 +11,7 @@ public class CollectionTester {
 
     public static void main(String[] args) {
 
-        CollectionBuilder collectionBuilder = new CollectionBuilder();
-        Collection collection = collectionBuilder.createCollection(FILES);
+        Collection collection = CollectionBuilder.createCollection(FILES);
         System.out.println("Total size: " + collection.getTotalSizeKB() + " KB");
         System.out.println("Total word count: " + collection.getTotalWordCount());
         System.out.println("Dictionary word count: " + collection.getDictionaryWordCount());

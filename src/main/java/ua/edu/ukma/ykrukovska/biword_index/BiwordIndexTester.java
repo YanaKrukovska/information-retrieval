@@ -11,8 +11,7 @@ public class BiwordIndexTester {
     private static final String BOOK_PATH = "D://Studying//InfortmationRetrieval//fb2//";
 
     public static void main(String[] args) {
-        BiwordIndexBuilder biwordIndexBuilder = new BiwordIndexBuilder();
-        BiwordIndex biwordIndex = biwordIndexBuilder.createBiwordIndex(Arrays.asList(BOOK_PATH + "AliceWonderland.fb2",
+        BiwordIndex biwordIndex = BiwordIndexBuilder.createBiwordIndex(Arrays.asList(BOOK_PATH + "AliceWonderland.fb2",
                 BOOK_PATH + "CallOfWild.fb2", BOOK_PATH + "GulliversTravels.fb2", BOOK_PATH + "harrypotter1.fb2"));
 
      // BiwordIndexWriter.writeBiwordIndex(biwordIndex, RESULT_PATH + "BiWordResult.txt");

@@ -9,7 +9,10 @@ import java.util.List;
 
 public class CollectionBuilder {
 
-    public Collection createCollection(List<String> files) {
+    private CollectionBuilder() {
+    }
+
+    public static Collection createCollection(List<String> files) {
 
         Collection collection = new Collection();
 

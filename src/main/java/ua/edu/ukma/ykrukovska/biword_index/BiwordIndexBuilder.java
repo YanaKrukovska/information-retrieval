@@ -10,7 +10,10 @@ import java.util.List;
 
 public class BiwordIndexBuilder {
 
-    public BiwordIndex createBiwordIndex(List<String> files) {
+    private BiwordIndexBuilder() {
+    }
+
+    public static BiwordIndex createBiwordIndex(List<String> files) {
 
         BiwordIndex biwordIndex = new BiwordIndex(files);
 
