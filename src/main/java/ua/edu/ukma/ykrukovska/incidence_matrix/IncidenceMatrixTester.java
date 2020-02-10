@@ -3,22 +3,19 @@ package ua.edu.ukma.ykrukovska.incidence_matrix;
 import ua.edu.ukma.ykrukovska.BooleanSearcher;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Scanner;
+
+import static ua.edu.ukma.ykrukovska.PathValues.FILES;
+import static ua.edu.ukma.ykrukovska.PathValues.RESULT_PATH;
 
 public class IncidenceMatrixTester {
 
-    private static final String BOOK_PATH = "D://Studying//InfortmationRetrieval//fb2//";
-    private static final String RESUlT_PATH = "D://Studying//InfortmationRetrieval//MatrixResult.txt";
 
     public static void main(String[] args) {
         IncidenceMatrixBuilder matrixBuilder = new IncidenceMatrixBuilder();
-        IncidenceMatrix matrix = matrixBuilder.createCollection(Arrays.asList(BOOK_PATH + "harrypotter1.fb2", BOOK_PATH + "PrideAndPrejudice.fb2",
-                BOOK_PATH + "MonteCristo.fb2", BOOK_PATH + "DorianGray.fb2", BOOK_PATH + "JourneyEarth.fb2",
-                BOOK_PATH + "TreasureIsland.fb2", BOOK_PATH + "AliceWonderland.fb2",
-                BOOK_PATH + "GulliversTravels.fb2", BOOK_PATH + "CallOfWild.fb2", BOOK_PATH + "GrimmsFairyTales.fb2"));
+        IncidenceMatrix matrix = matrixBuilder.createCollection(FILES);
 
-        IncidenceMatrixWriter.writeMatrix(matrix, RESUlT_PATH);
+        IncidenceMatrixWriter.writeMatrix(matrix, RESULT_PATH + "MatrixResult.txt");
 
         for (int i = 0; i < matrix.getFiles().size(); i++) {
             System.out.println((i + " = " + new File(matrix.getFiles().get(i)).getName()));
