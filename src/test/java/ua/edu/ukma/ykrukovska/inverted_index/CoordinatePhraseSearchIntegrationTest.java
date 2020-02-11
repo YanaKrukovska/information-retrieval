@@ -12,8 +12,7 @@ public class CoordinatePhraseSearchIntegrationTest {
 
     @Test
     public void findPhraseIntegrationTest() {
-        InvertedIndexBuilder invertedIndexBuilder = new InvertedIndexBuilder();
-        InvertedIndex invertedIndex = invertedIndexBuilder.createCollection(Arrays.asList(BOOK_PATH + "harrypotter1.fb2", BOOK_PATH + "PrideAndPrejudice.fb2",
+        InvertedIndex invertedIndex = InvertedIndexBuilder.createCollection(Arrays.asList(BOOK_PATH + "harrypotter1.fb2", BOOK_PATH + "PrideAndPrejudice.fb2",
                 BOOK_PATH + "MonteCristo.fb2", BOOK_PATH + "DorianGray.fb2", BOOK_PATH + "JourneyEarth.fb2",
                 BOOK_PATH + "TreasureIsland.fb2", BOOK_PATH + "AliceWonderland.fb2",
                 BOOK_PATH + "GulliversTravels.fb2", BOOK_PATH + "CallOfWild.fb2", BOOK_PATH + "GrimmsFairyTales.fb2"));

@@ -8,11 +8,11 @@ import static ua.edu.ukma.ykrukovska.PathValues.RESULT_PATH;
 
 public class BiwordIndexTester {
 
-    private static final String BOOK_PATH = "D://Studying//InfortmationRetrieval//fb2//";
+    private static final String BOOK_PATH = "D://Studying//InformationRetrieval//fb2//";
 
     public static void main(String[] args) {
         BiwordIndex biwordIndex = BiwordIndexBuilder.createBiwordIndex(Arrays.asList(BOOK_PATH + "AliceWonderland.fb2",
-                BOOK_PATH + "CallOfWild.fb2", BOOK_PATH + "GulliversTravels.fb2", BOOK_PATH + "harrypotter1.fb2"));
+                BOOK_PATH + "CallOfWild.fb2", BOOK_PATH + "GulliversTravels.fb2"));
 
      // BiwordIndexWriter.writeBiwordIndex(biwordIndex, RESULT_PATH + "BiWordResult.txt");
 

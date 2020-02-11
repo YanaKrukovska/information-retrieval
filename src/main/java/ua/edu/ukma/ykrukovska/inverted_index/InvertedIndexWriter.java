@@ -21,13 +21,16 @@ public class InvertedIndexWriter {
                 writer.write(System.lineSeparator());
                 writer.write(name + ": " + System.lineSeparator());
 
-                for (String fileName : invertedIndex.getInvertedIndex().get(name).keySet()) {
-                    List<Integer> values = invertedIndex.getInvertedIndex().get(name).get(fileName);
-                    writer.write(invertedIndex.getFiles().indexOf(fileName) + ": ");
-                    for (Integer value : values) {
-                        writer.write(value + ", ");
+                for (int i = 0; i < invertedIndex.getFiles().size(); i++) {
+                    List<Integer> values = invertedIndex.getInvertedIndex().get(name).get(invertedIndex.getFiles().get(i));
+                    if (values != null) {
+
+                        writer.write(i + ": ");
+                        for (Integer value : values) {
+                            writer.write(value + ", ");
+                        }
+                        writer.write(System.lineSeparator());
                     }
-                    writer.write(System.lineSeparator());
                 }
             }
 
