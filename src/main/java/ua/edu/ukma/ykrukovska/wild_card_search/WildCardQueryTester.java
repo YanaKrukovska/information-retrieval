@@ -1,5 +1,8 @@
 package ua.edu.ukma.ykrukovska.wild_card_search;
 
+import ua.edu.ukma.ykrukovska.permuterm_index.PermutermIndex;
+import ua.edu.ukma.ykrukovska.permuterm_index.PermutermIndexBuilder;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,12 +18,13 @@ public class WildCardQueryTester {
 
         SuffixTree suffixTree = SufixTreeBuilder.createSuffixTree(FILES);
         PrefixTree prefixTree = PrefixTreeBuilder.createPrefixBuilder(FILES);
+        PermutermIndex permutermIndex = PermutermIndexBuilder.createCollection(FILES);
 
-        WildCardQuery wildCardQuery = new WildCardQuery(prefixTree, suffixTree);
+        WildCardQuery wildCardQuery = new WildCardQuery(prefixTree, suffixTree, permutermIndex);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(RESULT_PATH + "WildCardQueryResult.txt"))) {
 
-            List<String> result = wildCardQuery.executeQuery("*lo");
+            List<String> result = wildCardQuery.executeQuery("y*s");
 
             writer.write(String.valueOf(result));
         } catch (IOException e) {
