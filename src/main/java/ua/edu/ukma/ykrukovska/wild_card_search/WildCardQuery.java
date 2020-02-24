@@ -1,6 +1,7 @@
 package ua.edu.ukma.ykrukovska.wild_card_search;
 
 import ua.edu.ukma.ykrukovska.permuterm_index.PermutermIndex;
+import ua.edu.ukma.ykrukovska.permuterm_index.ThreeGramIndex;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +11,7 @@ public class WildCardQuery {
     private PrefixTree prefixTree;
     private SuffixTree suffixTree;
     private PermutermIndex permutermIndex;
+    private ThreeGramIndex threeGramIndex;
 
     public WildCardQuery(PrefixTree prefixTree, SuffixTree suffixTree, PermutermIndex permutermIndex) {
         this.prefixTree = prefixTree;
@@ -17,9 +19,15 @@ public class WildCardQuery {
         this.permutermIndex = permutermIndex;
     }
 
+    public WildCardQuery(ThreeGramIndex threeGramIndex, PermutermIndex permutermIndex) {
+        this.threeGramIndex = threeGramIndex;
+        this.permutermIndex = permutermIndex;
+    }
+
+
     public List<String> executeQuery(String query) {
 
-        List<String> words = new LinkedList<>();
+        List<String> words;
 
 
         if (query.charAt(query.length() - 1) == '*') {
@@ -27,15 +35,7 @@ public class WildCardQuery {
         } else if (query.charAt(0) == '*') {
             words = suffixTree.getWordsWithSuffix(query.substring(1, query.length()));
         } else {
-            int pos = query.indexOf('*');
-            List<String> wordsWithGivenPrefix = prefixTree.getWordsWithPrefix(query.substring(0, pos));
-            List<String> wordsWithGivenSuffix = suffixTree.getWordsWithSuffix(query.substring(pos + 1, query.length()));
-            wordsWithGivenPrefix.retainAll(wordsWithGivenSuffix);
-            words = wordsWithGivenPrefix;
-
-           // words = findMiddleWildCard(query);
-
-
+            words = findMiddleWildCardPermutermIndex(query);
         }
 
 
@@ -43,9 +43,10 @@ public class WildCardQuery {
 
     }
 
-    public List<String> findMiddleWildCard(String query) {
+    public List<String> findMiddleWildCardPermutermIndex(String query) {
         permutermIndex.generateRotations(query);
         StringBuilder str = new StringBuilder(query + "$");
+        List<String> result = new LinkedList<>();
 
         do {
             str.append(str.charAt(0));
@@ -54,22 +55,72 @@ public class WildCardQuery {
 
         String word = str.toString();
         String[] splitByIndexSymbol = word.split("\\$");
-        List<String> wordsWithPrefix = prefixTree.getWordsWithPrefix(splitByIndexSymbol[1].substring(0, splitByIndexSymbol[1].length() - 1));
+
+        List<String> wordsWithPrefix = findWordsWithPrefix(splitByIndexSymbol[1]);
+        List<String> indexWords;
+
+
+        indexWords = splitByIndexSymbol[0].contains("*") ?
+                getIndexWordsDoubleQuery(splitByIndexSymbol[0].split("\\*")[0], splitByIndexSymbol[0].split("\\*")[1], wordsWithPrefix) : getIndexWords(splitByIndexSymbol[0], wordsWithPrefix);
+
+
+        addWordsPresentInPermutermIndex(result, indexWords);
+
+
+        System.out.println(result);
+        return result;
+    }
+
+    private List<String> getIndexWords(String s, List<String> wordsWithPrefix) {
         List<String> indexWords = new LinkedList<>();
-        List<String> result = new LinkedList<>();
-
-
         for (String wordWithPrefix : wordsWithPrefix) {
-            indexWords.add(splitByIndexSymbol[0] + "$" + wordWithPrefix);
-        }
+            String possibleWord = wordWithPrefix.substring(0, wordWithPrefix.length() - s.length());
+            indexWords.add(s + "$" + possibleWord);
 
+        }
+        return indexWords;
+    }
+
+    private List<String> getIndexWordsDoubleQuery(String extra, String ending, List<String> wordsWithPrefix) {
+        List<String> indexWords = new LinkedList<>();
+        for (String wordWithPrefix : wordsWithPrefix) {
+            String possibleWord = wordWithPrefix.substring(0, wordWithPrefix.length() - ending.length());
+            if (possibleWord.contains(extra)) {
+                indexWords.add(ending + "$" + possibleWord);
+            }
+        }
+        return indexWords;
+    }
+
+    private List<String> findWordsWithPrefix(String prefix) {
+        return prefixTree.getWordsWithPrefix(prefix.substring(0, prefix.length() - 1));
+    }
+
+    private void addWordsPresentInPermutermIndex(List<String> result, List<String> indexWords) {
         for (String index : indexWords) {
             if (permutermIndex.getPermutermIndex().containsKey(index)) {
                 result.add(permutermIndex.getPermutermIndex().get(index));
             }
         }
+    }
 
-        System.out.println(result);
-        return result;
+
+    public List<String> findMiddleWildCardThreeGram(String query) {
+
+
+        String query1 = "$" + query.split("\\*")[0].substring(0,2);
+        List<String> res1 = threeGramIndex.getThreeGramIndex().get(query1);
+        List<String> res2 = new LinkedList<>();
+
+        if (query.split("\\*").length > 1) {
+
+            String query2 = query.split("\\*")[1] + "$";
+            res2 = threeGramIndex.getThreeGramIndex().get(query2);
+            res1.retainAll(res2);
+            return res1;
+        }
+
+
+        return res1;
     }
 }

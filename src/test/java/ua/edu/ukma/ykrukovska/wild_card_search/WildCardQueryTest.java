@@ -16,7 +16,7 @@ public class WildCardQueryTest {
         prefixTree.add("cat");
         prefixTree.add("cult");
         SuffixTree suffixTree = new SuffixTree();
-        prefixTree.add("animal");
+        suffixTree.add("animal");
         suffixTree.add("cat");
         suffixTree.add("cult");
 
@@ -26,22 +26,12 @@ public class WildCardQueryTest {
 
         WildCardQuery wildCardQuery = new WildCardQuery(prefixTree, suffixTree, permutermIndex);
 
-        Map<String, String> index = new HashMap<>();
-        index.put("cat$", "cat");
-        index.put("at$c", "cat");
-        index.put("t$ca", "cat");
-        index.put("$cat", "cat");
-        index.put("cult$", "cult");
-        index.put("ult$c", "cult");
-        index.put("lt$cu", "cult");
-        index.put("t$cul", "cult");
-        index.put("$cult", "cult");
 
         List<String> result = new LinkedList<>();
         result.add("cat");
         result.add("cult");
 
-        Assert.assertEquals(result, wildCardQuery.findMiddleWildCard("c*t"));
+        Assert.assertEquals(result, wildCardQuery.findMiddleWildCardPermutermIndex("c*t"));
 
 
     }

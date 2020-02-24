@@ -10,6 +10,9 @@ import java.util.List;
 
 public class ThreeGramIndexBuilder {
 
+    public ThreeGramIndexBuilder() {
+    }
+
     public static ThreeGramIndex createCollection(List<String> files) {
 
         ThreeGramIndex threeGramIndex = new ThreeGramIndex(files);
