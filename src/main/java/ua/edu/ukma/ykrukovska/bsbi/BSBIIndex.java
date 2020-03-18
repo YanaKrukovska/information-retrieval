@@ -11,13 +11,15 @@ import static ua.edu.ukma.ykrukovska.PathValues.BOOK_PATH;
 public class BSBIIndex {
 
     private Queue<String[]> queue;
+    private BSBI bsbi;
     private Map<String, Integer> termList;
     private HashMap<String, Integer> blockDocumentList;
     private HashMap<Integer, TermPostings> termPostingsLists;
     private List<File> documents;
 
 
-    public BSBIIndex(Queue<String[]> queue, HashMap<String, Integer> termList, HashMap<String, Integer> blockDocumentList, File[] documents) {
+    public BSBIIndex(BSBI bsbi, Queue<String[]> queue, HashMap<String, Integer> termList, HashMap<String, Integer> blockDocumentList, File[] documents) {
+        this.bsbi = bsbi;
         this.queue = queue;
         this.termList = termList;
         this.blockDocumentList = blockDocumentList;
@@ -27,7 +29,6 @@ public class BSBIIndex {
 
 
     public void createIndex(int blockNumber, int filesPerBlock) {
-        int blockID = blockNumber;
         int filesDone = 0;
         int termID = termList.size();
         boolean isIndexingFinished = false;
@@ -40,12 +41,13 @@ public class BSBIIndex {
                 String documentTitle = document[0];
                 String documentBody = document[1];
 
-                blockDocumentList.put(documentTitle, blockID);
+                blockDocumentList.put(documentTitle, blockNumber);
 
 
                 String[] terms = documentBody.split(" ");
 
                 for (String term : terms) {
+                    term = term.toLowerCase();
                     int id;
                     if (!termList.containsKey(term)) {
                         termList.put(term, termID);
@@ -68,7 +70,7 @@ public class BSBIIndex {
             }
 
             if (filesDone == filesPerBlock) {
-                writeBlockIntoFile(blockID);
+                writeBlockIntoFile(blockNumber);
                 isIndexingFinished = true;
             }
         }
@@ -78,9 +80,15 @@ public class BSBIIndex {
         BlockWriter blockWriter = new BlockWriter();
         try {
             blockWriter.write(termPostingsLists, documentID);
+            bsbi.getGeneralList().putAll(termPostingsLists);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public Map<String, Integer> getTermList() {
+        return termList;
     }
 
 

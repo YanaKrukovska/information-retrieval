@@ -27,7 +27,7 @@ public class TermPostings implements Comparable<TermPostings> {
         this.termId = termId;
     }
 
-    public Collection<Integer> getPostingsList() {
+    public TreeSet<Integer> getPostingsList() {
         return postingsList;
     }
 

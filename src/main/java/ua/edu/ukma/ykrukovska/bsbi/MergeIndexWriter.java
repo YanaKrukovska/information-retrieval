@@ -14,15 +14,13 @@ import java.util.Queue;
 public class MergeIndexWriter {
 
     private final Queue<TermPostings> listToMerge;
-    private final File file;
     private BufferedWriter writer;
     private final BSBI bsbi;
 
     public MergeIndexWriter(BSBI bsbi, Queue<TermPostings> list, File file) throws IOException {
         this.bsbi = bsbi;
         this.listToMerge = list;
-        this.file = file;
-        writer = new BufferedWriter(new FileWriter(this.file));
+        writer = new BufferedWriter(new FileWriter(file));
     }
 
     public void mergeAndWrite() throws IOException {
@@ -101,8 +99,4 @@ public class MergeIndexWriter {
         writer.newLine();
 
     }
-
-
-
-
 }

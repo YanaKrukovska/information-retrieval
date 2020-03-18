@@ -16,6 +16,10 @@ public class BSBI {
     private int amountOfFinishedBlocks;
     private int amountOfBlocks;
     private int documentsPerBlock;
+    private BSBIIndex indexer;
+    private MergeIndexWriter mergeIndexWriter;
+    private HashMap<Integer, TermPostings> generalList = new HashMap<>();
+
 
     public BSBI(File[] documents) {
         this.documents = documents;
@@ -51,7 +55,7 @@ public class BSBI {
                 }
             }
 
-            MergeIndexWriter mergeIndexWriter = new MergeIndexWriter(this, mergeQueue, invertedIndexFile);
+             mergeIndexWriter = new MergeIndexWriter(this, mergeQueue, invertedIndexFile);
             mergeIndexWriter.mergeAndWrite();
 
         } catch (IOException e) {
@@ -66,7 +70,7 @@ public class BSBI {
             BlockingQueue<String[]> queue = new LinkedBlockingQueue<>();
 
             BlockReader reader = new BlockReader(block, queue);
-            BSBIIndex indexer = new BSBIIndex(queue, termList, documentList, documents);
+             indexer = new BSBIIndex(this, queue, termList, documentList, documents);
 
             reader.readBlocks();
             indexer.createIndex(blockNumber++, documentsPerBlock);
@@ -101,4 +105,14 @@ public class BSBI {
     public int getAmountOfBlocks() {
         return amountOfBlocks;
     }
+
+    public BSBIIndex getIndexer() {
+        return indexer;
+    }
+
+
+    public HashMap<Integer, TermPostings> getGeneralList() {
+        return generalList;
+    }
+
 }
