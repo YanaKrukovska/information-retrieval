@@ -10,7 +10,7 @@ public class CoordinatePhraseSearch {
         this.invertedIndex = invertedIndex;
     }
 
-    public Set<Integer> findPhrase(String phrase) {
+    public Set<Integer> findExactPhrase(String phrase) {
 
         String[] queryWords = parsePhrase(phrase);
 

@@ -26,7 +26,7 @@ public class InvertedIndexTester {
         do {
             System.out.println("Insert search: ");
             String input = in.nextLine();
-            System.out.println(coordinatePhraseSearch.findPhrase(input));
+            System.out.println(coordinatePhraseSearch.findExactPhrase(input));
             System.out.println("Do y'all want to continue? 0 - no");
             toExit = exit.nextInt();
         } while (toExit != 0);

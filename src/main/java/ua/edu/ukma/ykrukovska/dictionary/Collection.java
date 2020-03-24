@@ -1,4 +1,4 @@
-package ua.edu.ukma.ykrukovska;
+package ua.edu.ukma.ykrukovska.dictionary;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 public class Collection {
 
     private List<CollectionItem> items = new LinkedList<>();
-    private Dictionary dictionary = new DictionaryArray();
- //   private Dictionary dictionary = new DictionarySet();
+ // private Dictionary dictionary = new DictionaryArray();
+  private Dictionary dictionary = new DictionarySet();
 
 
     public long getTotalSizeKB() {

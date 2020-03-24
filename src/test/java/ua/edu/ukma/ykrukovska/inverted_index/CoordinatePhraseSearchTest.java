@@ -2,12 +2,8 @@ package ua.edu.ukma.ykrukovska.inverted_index;
 
 import org.junit.Assert;
 import org.junit.Test;
-import ua.edu.ukma.ykrukovska.biword_index.BiwordIndex;
-import ua.edu.ukma.ykrukovska.biword_index.BiwordPhraseSearch;
 
 import java.util.*;
-
-import static org.junit.Assert.*;
 
 public class CoordinatePhraseSearchTest {
 
@@ -28,7 +24,7 @@ public class CoordinatePhraseSearchTest {
         resultsList.add(1);
 
         CoordinatePhraseSearch coordinatePhraseSearch = new CoordinatePhraseSearch(invertedIndex);
-        Assert.assertEquals(resultsList, coordinatePhraseSearch.findPhrase("cats and"));
+        Assert.assertEquals(resultsList, coordinatePhraseSearch.findExactPhrase("cats and"));
     }
 
     @Test
@@ -52,7 +48,7 @@ public class CoordinatePhraseSearchTest {
         resultsList.add(1);
 
         CoordinatePhraseSearch coordinatePhraseSearch = new CoordinatePhraseSearch(invertedIndex);
-        Assert.assertEquals(resultsList, coordinatePhraseSearch.findPhrase("cats and"));
+        Assert.assertEquals(resultsList, coordinatePhraseSearch.findExactPhrase("cats and"));
     }
 
     @Test
@@ -81,7 +77,7 @@ public class CoordinatePhraseSearchTest {
         resultsList.add(2);
 
         CoordinatePhraseSearch coordinatePhraseSearch = new CoordinatePhraseSearch(invertedIndex);
-        Assert.assertEquals(resultsList, coordinatePhraseSearch.findPhrase("cats and dogs"));
+        Assert.assertEquals(resultsList, coordinatePhraseSearch.findExactPhrase("cats and dogs"));
     }
 
     @Test
@@ -118,7 +114,7 @@ public class CoordinatePhraseSearchTest {
         resultsList.add(3);
 
         CoordinatePhraseSearch coordinatePhraseSearch = new CoordinatePhraseSearch(invertedIndex);
-        Assert.assertEquals(resultsList, coordinatePhraseSearch.findPhrase("cats and dogs"));
+        Assert.assertEquals(resultsList, coordinatePhraseSearch.findExactPhrase("cats and dogs"));
     }
 
     @Test
@@ -142,9 +138,9 @@ public class CoordinatePhraseSearchTest {
         Set<Integer> resultsList = new TreeSet<>();
 
         CoordinatePhraseSearch coordinatePhraseSearch = new CoordinatePhraseSearch(invertedIndex);
-        Assert.assertEquals(resultsList, coordinatePhraseSearch.findPhrase("you love dogs"));
-        Assert.assertEquals(resultsList, coordinatePhraseSearch.findPhrase("i hate dogs"));
-        Assert.assertEquals(resultsList, coordinatePhraseSearch.findPhrase("i love cats"));
+        Assert.assertEquals(resultsList, coordinatePhraseSearch.findExactPhrase("you love dogs"));
+        Assert.assertEquals(resultsList, coordinatePhraseSearch.findExactPhrase("i hate dogs"));
+        Assert.assertEquals(resultsList, coordinatePhraseSearch.findExactPhrase("i love cats"));
     }
 
 
@@ -173,7 +169,7 @@ public class CoordinatePhraseSearchTest {
         resultsList.add(5);
 
         CoordinatePhraseSearch coordinatePhraseSearch = new CoordinatePhraseSearch(invertedIndex);
-        Assert.assertEquals(resultsList, coordinatePhraseSearch.findPhrase("i love dogs"));
+        Assert.assertEquals(resultsList, coordinatePhraseSearch.findExactPhrase("i love dogs"));
 
     }
 
@@ -202,6 +198,6 @@ public class CoordinatePhraseSearchTest {
         resultsList.add(5);
 
         CoordinatePhraseSearch coordinatePhraseSearch = new CoordinatePhraseSearch(invertedIndex);
-        Assert.assertEquals(resultsList, coordinatePhraseSearch.findPhrase("i love cats"));
+        Assert.assertEquals(resultsList, coordinatePhraseSearch.findExactPhrase("i love cats"));
     }
 }

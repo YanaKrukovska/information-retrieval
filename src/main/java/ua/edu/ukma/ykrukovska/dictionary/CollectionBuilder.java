@@ -1,6 +1,7 @@
-package ua.edu.ukma.ykrukovska;
+package ua.edu.ukma.ykrukovska.dictionary;
 
 import org.xml.sax.SAXException;
+import ua.edu.ukma.ykrukovska.FictionBookParser;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
@@ -16,9 +17,9 @@ public class CollectionBuilder {
 
         Collection collection = new Collection();
 
+       // Dictionary dictionary = new DictionaryArray();
+      Dictionary dictionary = new DictionarySet();
 
-     //  Dictionary dictionary = new DictionaryArray();
-        Dictionary dictionary = new DictionarySet();
         for (String fileName : files) {
             try {
                 FictionBookParser fictionBookParser = new FictionBookParser(fileName);
@@ -33,6 +34,7 @@ public class CollectionBuilder {
             }
 
         }
+      //  System.out.println("Elapsed time: " + ((System.nanoTime() - startTime)/1000));
         collection.setDictionary(dictionary);
         return collection;
     }

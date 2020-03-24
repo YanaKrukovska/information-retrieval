@@ -19,6 +19,9 @@ public class FictionBookParser {
     private SAXParser saxParser;
     private FB2Handler handler;
     private List<String> words = new LinkedList<>();
+    private String title = "";
+    private String author = "";
+
 
     public FictionBookParser(String fileName) throws ParserConfigurationException, SAXException, IOException {
         Objects.requireNonNull(fileName, "File name ust be not null");
@@ -34,29 +37,43 @@ public class FictionBookParser {
     }
 
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
     public class FB2Handler extends DefaultHandler {
         private static final String PARAGRAPH = "p";
+        private static final String AUTHOR = "author";
+        private static final String TITLE = "title";
 
 
         private String elementValue;
 
         @Override
-        public void characters(char[] ch, int start, int length) throws SAXException {
+        public void characters(char[] ch, int start, int length) {
             elementValue = new String(ch, start, length);
         }
 
 
         @Override
-        public void endElement(String uri, String localName, String qName) throws SAXException {
+        public void endElement(String uri, String localName, String qName) {
             switch (qName) {
                 case PARAGRAPH:
-                  //  String[] splitWords = elementValue.split("[^a-zA-Zа-яА-ЯіІєЄїЇёЁ0-9'\\+-]+[^a-zA-Zа-яА-ЯіІєЄїЇёЁ]*");
                     String[] splitWords = elementValue.split("[^a-zA-Zа-яА-ЯіІєЄїЇёЁ]+");
                     words.addAll(Arrays.asList(splitWords));
                     break;
+                case AUTHOR:
+                    author = elementValue;
+                    break;
+                case TITLE:
+                    title = elementValue;
+                    break;
             }
         }
-
 
     }
 }

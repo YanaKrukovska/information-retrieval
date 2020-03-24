@@ -1,7 +1,5 @@
 package ua.edu.ukma.ykrukovska.incidence_matrix;
 
-import ua.edu.ukma.ykrukovska.BooleanSearcher;
-
 import java.io.File;
 import java.util.Scanner;
 

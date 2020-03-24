@@ -28,6 +28,7 @@ public class WildCardQueryIntegrationTest {
         List<String> result = new LinkedList<>();
         result.add("cats");
         result.add("caerjs");
+        result.add("califlowers");
         result.add("californias");
         result.add("cannabis");
 
@@ -127,7 +128,7 @@ public class WildCardQueryIntegrationTest {
         result.add("swinging");
         result.add("swelling");
 
-        Assert.assertEquals(result, wildCardQuery.findMiddleWildCardThreeGram("sw*ng"));
+        Assert.assertEquals(result, wildCardQuery.findMiddleWildCardThreeGram("sw*ing"));
 
     }
 
@@ -143,6 +144,21 @@ public class WildCardQueryIntegrationTest {
         result.add("swinging");
 
         Assert.assertEquals(result, wildCardQuery.findMiddleWildCardThreeGram("swi*"));
+
+    }
+
+    @Test
+    public void findSimpleMiddleQuery3ThreeGram() {
+        ThreeGramIndex threeGramIndex = ThreeGramIndexBuilder.createCollection((Collections.singletonList(BOOK_PATH + "test4.fb2")));
+        PermutermIndex permutermIndex = PermutermIndexBuilder.createCollection(Collections.singletonList(BOOK_PATH + "test4.fb2"));
+
+        WildCardQuery wildCardQuery = new WildCardQuery(threeGramIndex, permutermIndex);
+
+        List<String> result = new LinkedList<>();
+        result.add("californias");
+        result.add("califlowers");
+
+        Assert.assertEquals(result, wildCardQuery.findMiddleWildCardThreeGram("calif*s"));
 
     }
 }

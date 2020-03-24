@@ -1,6 +1,6 @@
 import org.junit.Assert;
 import org.junit.Test;
-import ua.edu.ukma.ykrukovska.DictionaryArray;
+import ua.edu.ukma.ykrukovska.dictionary.DictionaryArray;
 
 public class DictionaryArrayTest {
 

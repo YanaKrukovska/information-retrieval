@@ -1,4 +1,4 @@
-package ua.edu.ukma.ykrukovska;
+package ua.edu.ukma.ykrukovska.incidence_matrix;
 
 import ua.edu.ukma.ykrukovska.incidence_matrix.IncidenceMatrix;
 

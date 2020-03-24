@@ -2,6 +2,7 @@ package ua.edu.ukma.ykrukovska;
 
 import org.junit.Assert;
 import org.junit.Test;
+import ua.edu.ukma.ykrukovska.incidence_matrix.BooleanSearcher;
 import ua.edu.ukma.ykrukovska.incidence_matrix.IncidenceMatrix;
 
 import java.util.*;

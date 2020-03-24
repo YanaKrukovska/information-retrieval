@@ -108,18 +108,47 @@ public class WildCardQuery {
     public List<String> findMiddleWildCardThreeGram(String query) {
 
 
-        String query1 = "$" + query.split("\\*")[0].substring(0,2);
+        String firstPartOfWord = query.split("\\*")[0];
+        String query1 = "$" + firstPartOfWord.substring(0, 2);
         List<String> res1 = threeGramIndex.getThreeGramIndex().get(query1);
         List<String> res2 = new LinkedList<>();
 
-        if (query.split("\\*").length > 1) {
 
-            String query2 = query.split("\\*")[1] + "$";
+        while (firstPartOfWord.length() >= 3) {
+
+            String query2 = firstPartOfWord.substring(0, 3);
             res2 = threeGramIndex.getThreeGramIndex().get(query2);
             res1.retainAll(res2);
-            return res1;
+
+            StringBuilder str = new StringBuilder(firstPartOfWord);
+
+            str.deleteCharAt(0);
+            firstPartOfWord = str.toString();
         }
 
+        if (query.split("\\*").length > 1) {
+
+            String secondPartOfWord = query.split("\\*")[1];
+
+
+            while (secondPartOfWord.length() >= 3) {
+
+                String query2 = secondPartOfWord.substring(0, 3);
+                res2 = threeGramIndex.getThreeGramIndex().get(query2);
+                res1.retainAll(res2);
+
+                StringBuilder str = new StringBuilder(secondPartOfWord);
+
+                str.deleteCharAt(0);
+                secondPartOfWord = str.toString();
+
+                if (secondPartOfWord.length() == 2) {
+                    query2 = secondPartOfWord + "$";
+                    res2 = threeGramIndex.getThreeGramIndex().get(query2);
+                    res1.retainAll(res2);
+                }
+            }
+        }
 
         return res1;
     }

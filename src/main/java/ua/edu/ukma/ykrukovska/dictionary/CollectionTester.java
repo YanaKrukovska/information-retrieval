@@ -1,4 +1,4 @@
-package ua.edu.ukma.ykrukovska;
+package ua.edu.ukma.ykrukovska.dictionary;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
