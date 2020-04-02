@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 import static ua.edu.ukma.ykrukovska.PathValues.FILES_AS_FILES_SHORT_2;
 import static ua.edu.ukma.ykrukovska.PathValues.RESULT_PATH_BSBI;
@@ -18,17 +19,20 @@ import static ua.edu.ukma.ykrukovska.PathValues.RESULT_PATH_BSBI;
 public class ZoneWeightTester {
 
     private List<File> files;
+    private BSBI bsbi;
 
     private ZoneWeightTester(List<File> files) {
         this.files = files;
+        this.bsbi = new BSBI((File[]) files.toArray());
+        bsbi.doBSBI();
+
+
     }
 
     private List<PostingWeightZone> findDocuments(String word) throws IOException, ParserConfigurationException, SAXException {
 
         String searchWord = word.toLowerCase();
         List<PostingWeightZone> result = new LinkedList<>();
-        BSBI bsbi = new BSBI((File[]) files.toArray());
-        bsbi.doBSBI();
 
         BufferedReader bufferedReader = new BufferedReader(new FileReader(RESULT_PATH_BSBI + "bsbi_index.txt"));
         String line;
@@ -70,11 +74,22 @@ public class ZoneWeightTester {
 
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
         ZoneWeightTester zoneWeightTester = new ZoneWeightTester(FILES_AS_FILES_SHORT_2);
-        List<PostingWeightZone> result = zoneWeightTester.findDocuments("a");
 
-        for (PostingWeightZone aResult : result) {
-            System.out.println("Document id: " + aResult.getId() + ", weight = " + aResult.getWeight());
-        }
+        int toContinue = 0;
+        Scanner stringScanner = new Scanner(System.in);
+        Scanner intScanner = new Scanner(System.in);
+        String query;
+        do {
+            System.out.println("insert word: ");
+            query = stringScanner.nextLine();
 
+            List<PostingWeightZone> result = zoneWeightTester.findDocuments(query);
+
+            for (PostingWeightZone aResult : result) {
+                System.out.println("Document id: " + aResult.getId() + ", weight = " + aResult.getWeight());
+            }
+            System.out.println("Would you like to continue? 0 - no");
+            toContinue = intScanner.nextInt();
+        } while (toContinue != 0);
     }
 }
