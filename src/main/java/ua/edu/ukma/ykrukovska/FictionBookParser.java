@@ -15,9 +15,6 @@ import java.util.Objects;
 
 public class FictionBookParser {
 
-    private SAXParserFactory factory;
-    private SAXParser saxParser;
-    private FB2Handler handler;
     private List<String> words = new LinkedList<>();
     private String title = "";
     private String author = "";
@@ -26,9 +23,9 @@ public class FictionBookParser {
     public FictionBookParser(String fileName) throws ParserConfigurationException, SAXException, IOException {
         Objects.requireNonNull(fileName, "File name ust be not null");
 
-        this.factory = SAXParserFactory.newInstance();
-        this.saxParser = factory.newSAXParser();
-        this.handler = new FB2Handler();
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        SAXParser saxParser = factory.newSAXParser();
+        FB2Handler handler = new FB2Handler();
         saxParser.parse(fileName, handler);
     }
 
