@@ -1,27 +1,33 @@
 package ua.edu.ukma.ykrukovska.compression;
 
+import com.sun.org.apache.regexp.internal.RE;
+import ua.edu.ukma.ykrukovska.dictionary.Collection;
+import ua.edu.ukma.ykrukovska.dictionary.CollectionBuilder;
+
+import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import static ua.edu.ukma.ykrukovska.PathValues.FILES;
 import static ua.edu.ukma.ykrukovska.PathValues.FILES_SH;
+import static ua.edu.ukma.ykrukovska.PathValues.RESULT_PATH;
 
 public class CompressedDictionaryTester {
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
+        long start = System.nanoTime();
         CompressedDictionary compressedDictionary = CompressedDictionaryBuilder.createCompressedDictionary(FILES_SH);
-        System.out.println(compressedDictionary.getDictionary());
+        long finish = System.nanoTime();
+        long timeElapsed = finish - start;
+        System.out.println(timeElapsed);
 
-        System.out.println();
-        for (int i : compressedDictionary.getBlockIndexes()) {
-            System.out.print(i + " ");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(RESULT_PATH + "CompressedDictionaryResult.txt"))) {
+                writer.write(compressedDictionary.getDictionary());
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        System.out.println();
-        System.out.println(compressedDictionary.getTerm(23));
-
-        System.out.println();
-        for (int i = 0; i < compressedDictionary.getTerms().length; i += 1) {
-            System.out.println(i + ": " + compressedDictionary.getTerm(i));
-        }
-
-
     }
 }

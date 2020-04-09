@@ -6,8 +6,11 @@ import ua.edu.ukma.ykrukovska.FictionBookParser;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.List;
+import java.util.TreeSet;
 
 public class CompressedDictionaryBuilder {
+
+    private static TreeSet<String> termList = new TreeSet<>();
 
     private CompressedDictionaryBuilder() {
     }
@@ -29,12 +32,17 @@ public class CompressedDictionaryBuilder {
                 FictionBookParser fictionBookParser = new FictionBookParser(fileName);
                 List<String> wordList = fictionBookParser.getWordList();
                 for (String word : wordList) {
+
+                    if (!termList.contains(word)){
+                        termList.add(word);
                     if (termsIndex >= terms.length) {
                         terms = resize(terms, terms.length * 2);
                     }
                     terms[termsIndex++] = word;
                     terms = resize(terms, termsIndex);
+                    }
                 }
+
             } catch (ParserConfigurationException | SAXException | IOException e) {
                 e.printStackTrace();
             }

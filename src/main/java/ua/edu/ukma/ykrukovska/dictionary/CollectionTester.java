@@ -3,18 +3,20 @@ package ua.edu.ukma.ykrukovska.dictionary;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import static ua.edu.ukma.ykrukovska.PathValues.FILES;
-import static ua.edu.ukma.ykrukovska.PathValues.RESULT_PATH;
+import static ua.edu.ukma.ykrukovska.PathValues.*;
 
 public class CollectionTester {
 
     public static void main(String[] args) {
 
-        Collection collection = CollectionBuilder.createCollection(FILES);
+        Collection collection = CollectionBuilder.createCollection(FILES_SH);
+
         System.out.println("Total size: " + collection.getTotalSizeKB() + " KB");
-        System.out.println("Total word count: " + collection.getTotalWordCount());
-        System.out.println("Dictionary word count: " + collection.getDictionaryWordCount());
+        System.out.println("Total word countAmount: " + collection.getTotalWordCount());
+        System.out.println("Dictionary word countAmount: " + collection.getDictionaryWordCount());
 
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(RESULT_PATH + "DictionaryResult.txt"))) {
