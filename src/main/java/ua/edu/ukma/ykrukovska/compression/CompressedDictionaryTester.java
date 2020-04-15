@@ -1,33 +1,48 @@
 package ua.edu.ukma.ykrukovska.compression;
 
-import com.sun.org.apache.regexp.internal.RE;
-import ua.edu.ukma.ykrukovska.dictionary.Collection;
-import ua.edu.ukma.ykrukovska.dictionary.CollectionBuilder;
+import java.io.File;
 
-import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import static ua.edu.ukma.ykrukovska.PathValues.FILES;
-import static ua.edu.ukma.ykrukovska.PathValues.FILES_SH;
+import static ua.edu.ukma.ykrukovska.PathValues.BOOK_PATH_BSBI_2;
 import static ua.edu.ukma.ykrukovska.PathValues.RESULT_PATH;
 
 public class CompressedDictionaryTester {
 
-    public static void main(String[] args)  {
-        long start = System.nanoTime();
-        CompressedDictionary compressedDictionary = CompressedDictionaryBuilder.createCompressedDictionary(FILES_SH);
-        long finish = System.nanoTime();
-        long timeElapsed = finish - start;
-        System.out.println(timeElapsed);
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(RESULT_PATH + "CompressedDictionaryResult.txt"))) {
-                writer.write(compressedDictionary.getDictionary());
+    public static void main(String args[]) throws Exception {
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Indexing.buildIndex(BOOK_PATH_BSBI_2);
+
+        File uncompressedIndex = new File("D://Studying//InformationRetrieval//results//UncompressedIndex.txt");
+        File compressedBlockRes = new File("D://Studying//InformationRetrieval//results//CompressedDict_Block.txt");
+        File compressedFrontRes = new File("D://Studying//InformationRetrieval//results//CompressedDict_Front.txt");
+
+        long startTime;
+        long endTime;
+
+        startTime = System.currentTimeMillis();
+        Indexing.createUncompressedIndex(uncompressedIndex, Indexing.getInvertedDictionary());
+        endTime = System.currentTimeMillis();
+        System.out.println("Time for uncompressed index: " + (endTime - startTime) + " milliseconds");
+
+        Compression.createCompressedDictionary(Indexing.getInvertedDictionary());
+
+        startTime = System.currentTimeMillis();
+        Compression.blockedCompression(Compression.dictionary, compressedBlockRes);
+        endTime = System.currentTimeMillis();
+        System.out.println("Time for dictionary block compression: " + (endTime - startTime) + " milliseconds");
+
+        Compression.createCompressedDictionary(Indexing.getInvertedDictionary());
+
+        startTime = System.currentTimeMillis();
+        Compression.frontCoding(Compression.dictionary, compressedFrontRes);
+        endTime = System.currentTimeMillis();
+        System.out.println("Time for dictionary front compression: " + (endTime - startTime) + " milliseconds");
+
+
+        Compression.createCompressedIndex(uncompressedIndex, new File(RESULT_PATH + "CompressedIndex.txt"));
+        System.out.println();
+
     }
+
 }
