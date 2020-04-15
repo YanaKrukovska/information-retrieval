@@ -39,8 +39,11 @@ public class CompressedDictionaryTester {
         endTime = System.currentTimeMillis();
         System.out.println("Time for dictionary front compression: " + (endTime - startTime) + " milliseconds");
 
-
+        startTime = System.currentTimeMillis();
         Compression.createCompressedIndex(uncompressedIndex, new File(RESULT_PATH + "CompressedIndex.txt"));
+        endTime = System.currentTimeMillis();
+        System.out.println("Time for compressed index: " + (endTime - startTime) + " milliseconds");
+
         System.out.println();
 
     }
