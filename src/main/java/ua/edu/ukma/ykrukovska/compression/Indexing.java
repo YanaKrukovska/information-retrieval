@@ -1,5 +1,12 @@
 package ua.edu.ukma.ykrukovska.compression;
 
+import org.apache.lucene.search.CollectionStatistics;
+import org.apache.lucene.search.Explanation;
+import org.apache.lucene.search.TermStatistics;
+import org.apache.lucene.search.similarities.BM25Similarity;
+import org.apache.lucene.search.similarities.Similarity;
+import org.apache.lucene.util.BytesRef;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -10,10 +17,27 @@ import java.util.Map.Entry;
 class Indexing {
 
     private static Map<String, Dictionary> invertedDictionary = new TreeMap<>();
+    private static File file;
+
+    public static void explainIDF(String stringTerm){
+        BM25Similarity bm25Similarity = new BM25Similarity();
+        TermStatistics termStatistics = new TermStatistics(new BytesRef(stringTerm.getBytes()), invertedDictionary.get(stringTerm).postings.size(), invertedDictionary.get(stringTerm).termFrequency);
+        CollectionStatistics collectionStatistics = new CollectionStatistics(stringTerm, file.listFiles().length, invertedDictionary.get(stringTerm).postings.size(), invertedDictionary.get(stringTerm).termFrequency, invertedDictionary.get(stringTerm).postings.size());
+
+        Explanation exp = bm25Similarity.idfExplain(collectionStatistics, termStatistics);
+        System.out.println("Term: " + stringTerm + " - " + exp.getDescription());
+        Explanation[] details = exp.getDetails();
+        for (Explanation detail : details) {
+            System.out.println(detail);
+        }
+
+        System.out.println();
+
+    }
 
 
     public static void buildIndex(String directoryPath) throws Exception {
-        File file = new File(directoryPath);
+        file = new File(directoryPath);
         int docNumber = 0;
         for (File f : Objects.requireNonNull(file.listFiles())) {
             FileParser fileParser = new FileParser();
@@ -24,7 +48,7 @@ class Indexing {
         }
     }
 
-    private static void addToIndex(int docID, Map<String, Integer> termIndex, Map<String, Dictionary> DesiredDictionary, int documentLength) {
+    private static void addToIndex(int docID, Map<String, Integer> termIndex, Map<String, Dictionary> dictionary, int documentLength) {
 
         int max_tf = 0;
         for (String term : termIndex.keySet()) {
@@ -32,7 +56,7 @@ class Indexing {
                 max_tf = termIndex.get(term);
             }
 
-            addToDictionaryPosting(docID, term, termIndex.get(term), DesiredDictionary, (documentLength / 2), max_tf);
+            addToDictionaryPosting(docID, term, termIndex.get(term), dictionary, (documentLength / 2), max_tf);
         }
     }
 

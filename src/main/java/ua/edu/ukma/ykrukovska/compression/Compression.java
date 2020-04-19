@@ -81,7 +81,7 @@ public class Compression {
     }
 
 
-    private static List<CompressedPostingList> createPostingList(String term, List<PostingList> postingList) throws IOException {
+    private static List<CompressedPostingList> createPostingList(String term, List<PostingList> postingList) {
         List<CompressedPostingList> createCompressedPostingList = new LinkedList<>();
         int previousDocID = 0;
         for (PostingList postings : postingList) {
@@ -169,7 +169,7 @@ public class Compression {
         frontCodingWriter.flush();
         frontCodingWriter.close();
 
-        Iterator<Entry<String, CompressedDictionary>> itr = dictionary.entrySet().iterator();
+        dictionary.entrySet().iterator();
 
 
     }

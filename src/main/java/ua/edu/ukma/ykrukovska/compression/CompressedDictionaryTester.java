@@ -7,6 +7,7 @@ import static ua.edu.ukma.ykrukovska.PathValues.RESULT_PATH;
 
 public class CompressedDictionaryTester {
 
+    //Added usage of BM25 Similarity in Indexing class.
 
     public static void main(String args[]) throws Exception {
 
@@ -46,6 +47,10 @@ public class CompressedDictionaryTester {
 
         System.out.println();
 
+
+        //BM25Similarity usage
+        Indexing.explainIDF("alice");
+        Indexing.explainIDF("cat");
     }
 
 }
