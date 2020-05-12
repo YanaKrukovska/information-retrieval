@@ -8,51 +8,14 @@ import java.util.List;
 public class Posting {
     private int documentID;
     private List<Integer> mPositionIds = new ArrayList<>();
-    private int mTermFrequency;
-    private double wdtDefaultValue;
-    private double wdtTfIdfValue;
-    private double wdtOkapiValue;
-    private double wdtWackyValue;
+    private int termFrequency;
+    private int inverseTermFrequency;
 
-    public double getWdtDefaultValue() {
-        return wdtDefaultValue;
-    }
 
-    public double getWdtTfIdfValue() {
-        return wdtTfIdfValue;
-    }
-
-    public double getWdtOkapiValue() {
-        return wdtOkapiValue;
-    }
-
-    public double getWdtWackyValue() {
-        return wdtWackyValue;
-    }
-
-    public void setWdtDefaultValue(double wdtDefaultValue) {
-        this.wdtDefaultValue = wdtDefaultValue;
-    }
-
-    public void setWdtTfIdfValue(double wdtTfIdfValue) {
-        this.wdtTfIdfValue = wdtTfIdfValue;
-    }
-
-    public void setWdtOkapiValue(double wdtOkapiValue) {
-        this.wdtOkapiValue = wdtOkapiValue;
-    }
-
-    public void setWdtWackyValue(double wdtWackyValue) {
-        this.wdtWackyValue = wdtWackyValue;
-    }
-
-    public int getTermFrequency() {
-        return mTermFrequency;
-    }
-
-    public Posting(int documentId, List<Integer> positions) {
-        documentID = documentId;
-        mPositionIds = positions;
+    public Posting(int documentId, int termFrequency, List<Integer> positions) {
+        this.termFrequency = termFrequency;
+        this.documentID = documentId;
+        this.mPositionIds = positions;
     }
 
     public Posting(int documentId) {
@@ -61,12 +24,24 @@ public class Posting {
 
     public Posting(int documentId, int termFrequency) {
         this.documentID = documentId;
-        this.mTermFrequency = termFrequency;
+        this.termFrequency = termFrequency;
     }
+
+    public int getTermFrequency() {
+        return termFrequency;
+    }
+
+    public void setTermFrequency(int mTermFrequency) {
+        this.termFrequency = mTermFrequency;
+    }
+
     public void addPostingPosition(int position) {
         mPositionIds.add(position);
 
+
+
     }
+
     public int getDocumentId() {
         return documentID;
     }

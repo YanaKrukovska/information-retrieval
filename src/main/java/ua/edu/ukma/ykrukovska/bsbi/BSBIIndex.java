@@ -5,12 +5,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import static ua.edu.ukma.ykrukovska.PathValues.BOOK_PATH;
+import static ua.edu.ukma.ykrukovska.bsbi.BSBITester.GUTENBERG_PATH;
 
 
 public class BSBIIndex {
 
-    private Queue<String[]> queue;
+    private Queue<Document> queue;
     private BSBI bsbi;
     private Map<String, Integer> termList;
     private HashMap<String, Integer> blockDocumentList;
@@ -18,7 +18,7 @@ public class BSBIIndex {
     private List<File> documents;
 
 
-    public BSBIIndex(BSBI bsbi, Queue<String[]> queue, HashMap<String, Integer> termList, HashMap<String, Integer> blockDocumentList, File[] documents) {
+    public BSBIIndex(BSBI bsbi, Queue<Document> queue, HashMap<String, Integer> termList, HashMap<String, Integer> blockDocumentList, File[] documents) {
         this.bsbi = bsbi;
         this.queue = queue;
         this.termList = termList;
@@ -36,17 +36,16 @@ public class BSBIIndex {
 
         while (!isIndexingFinished) {
 
-            String[] document = queue.poll();
+            Document document = queue.poll();
             if (document != null) {
-                String documentTitle = document[0];
-                String documentBody = document[1];
+                String documentTitle = document.getName();
+                // List<String> documentBody = document.getWords();
 
+                Set<String> body = document.getUniqueWords();
                 blockDocumentList.put(documentTitle, blockNumber);
 
 
-                String[] terms = documentBody.split(" ");
-
-                for (String term : terms) {
+                for (String term : body) {
                     term = term.toLowerCase();
                     int id;
                     if (!termList.containsKey(term)) {
@@ -59,10 +58,10 @@ public class BSBIIndex {
 
                     if (!termPostingsLists.containsKey(id)) {
                         TermPostings termPostings = new TermPostings(id, new ArrayList<>());
-                        termPostings.addPostingsList(documents.indexOf(new File(BOOK_PATH + documentTitle)));
+                        termPostings.addPostingsList(documents.indexOf(new File(GUTENBERG_PATH + "//" + documentTitle)));
                         termPostingsLists.put(id, termPostings);
                     } else {
-                        termPostingsLists.get(id).addPostingsList(documents.indexOf(new File(BOOK_PATH + documentTitle)));
+                        termPostingsLists.get(id).addPostingsList(documents.indexOf(new File(GUTENBERG_PATH + "//" + documentTitle)));
                     }
                 }
 

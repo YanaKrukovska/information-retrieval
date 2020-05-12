@@ -2,17 +2,15 @@ package ua.edu.ukma.ykrukovska.cluster;
 
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public class DocumentVector {
 
 
-    private HashMap<Integer, Double> docVector;
-    private List<String> classVocab;
+    private Map<Integer, Double> docVector;
     private int documentID;
 
     public DocumentVector(int documentID) {
-        //this.classVocab = _classVocab;
         docVector = new HashMap<>();
         this.documentID = documentID;
     }
@@ -29,7 +27,7 @@ public class DocumentVector {
             docVector.put(termID, wdt);
     }
 
-    public HashMap<Integer, Double> getVector() {
+    public Map<Integer, Double> getVector() {
         return docVector;
     }
 
@@ -55,7 +53,7 @@ public class DocumentVector {
     }
 
 
-    public Double findSimilarity(DocumentVector v) {
+    public double findSimilarity(DocumentVector v) {
 
 
         double dot = 0;
@@ -72,7 +70,7 @@ public class DocumentVector {
         return dot / (this.findMagnitude() * v.findMagnitude());
     }
 
-    public Double findMagnitude() {
+    public double findMagnitude() {
         double mag = 0;
         for (Integer termID : docVector.keySet()) {
 
@@ -82,7 +80,7 @@ public class DocumentVector {
     }
 
 
-    public Double calculateDistance(DocumentVector v2) {
+    public double calculateDistance(DocumentVector v2) {
 
         double distance = 0;
         for (Integer termID : docVector.keySet()) {

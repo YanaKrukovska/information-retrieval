@@ -4,10 +4,10 @@ class QueryResult {
     int documentID;
     double dist;
 
-    public QueryResult(int docID, double dst) {
+    public QueryResult(int docID, double distance) {
 
         documentID = docID;
-        dist = dst;
+        dist = distance;
 
     }
 }

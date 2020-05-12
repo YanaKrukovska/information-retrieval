@@ -29,8 +29,13 @@ public class WildCardQuery {
 
         List<String> words;
 
+        if (query.length() == 1) {
+            return new LinkedList<>();
+        }
 
-        if (query.charAt(query.length() - 1) == '*') {
+        if (query.charAt(query.length() - 1) == '*' && query.charAt(0) == '*') {
+            words = findMiddleWildCardPermutermIndex(query.substring(1, query.length() ));
+        } else if (query.charAt(query.length() - 1) == '*') {
             words = prefixTree.getWordsWithPrefix(query.substring(0, query.length() - 1));
         } else if (query.charAt(0) == '*') {
             words = suffixTree.getWordsWithSuffix(query.substring(1, query.length()));
@@ -66,8 +71,6 @@ public class WildCardQuery {
 
         addWordsPresentInPermutermIndex(result, indexWords);
 
-
-        System.out.println(result);
         return result;
     }
 
@@ -111,7 +114,7 @@ public class WildCardQuery {
         String firstPartOfWord = query.split("\\*")[0];
         String query1 = "$" + firstPartOfWord.substring(0, 2);
         List<String> res1 = threeGramIndex.getThreeGramIndex().get(query1);
-        List<String> res2 = new LinkedList<>();
+        List<String> res2;
 
 
         while (firstPartOfWord.length() >= 3) {

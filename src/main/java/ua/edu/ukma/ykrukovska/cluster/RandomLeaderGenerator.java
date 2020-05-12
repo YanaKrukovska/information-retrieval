@@ -8,19 +8,19 @@ import java.util.Set;
 public class RandomLeaderGenerator {
     private Random random;
     private Set<Integer> generatedLeaders;
-    private int corpusSize;
+    private int amountOfDocuments;
 
     public RandomLeaderGenerator(int max) {
-        corpusSize = max;
+        amountOfDocuments = max;
         random = new Random();
         generatedLeaders = new HashSet<>();
     }
 
-    public Integer getNextLeader() {
-        int nextLeader = random.nextInt(corpusSize);
+    public int getNextLeader() {
+        int nextLeader = random.nextInt(amountOfDocuments);
 
         while (generatedLeaders.contains(nextLeader)) {
-            nextLeader = random.nextInt(corpusSize);
+            nextLeader = random.nextInt(amountOfDocuments);
         }
 
         generatedLeaders.add(nextLeader);

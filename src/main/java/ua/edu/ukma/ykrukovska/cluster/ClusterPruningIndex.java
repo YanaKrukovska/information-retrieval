@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class ClusterPruningIndex implements Index {
 
@@ -14,15 +15,15 @@ public class ClusterPruningIndex implements Index {
     private Index index;
 
 
-    public void buildIndex(File[] corpus, Index index) {
-        cluster = new Cluster(corpus, index);
+    public void buildIndex(File[] files, Index index) {
+        cluster = new Cluster(files, index);
         this.index = index;
 
     }
 
 
     public List<Integer> getPostings(String[] terms) {
-        PriorityQueue<QueryResult> results = cluster.query(terms);
+        Queue<QueryResult> results = cluster.query(terms);
         List<Integer> postings = new ArrayList<>();
         for (QueryResult result : results) {
             postings.add(result.documentID);

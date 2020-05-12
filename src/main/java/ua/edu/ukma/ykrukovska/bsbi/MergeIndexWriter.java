@@ -16,11 +16,13 @@ public class MergeIndexWriter {
     private final Queue<TermPostings> listToMerge;
     private BufferedWriter writer;
     private final BSBI bsbi;
+    private File resultFile;
 
     public MergeIndexWriter(BSBI bsbi, Queue<TermPostings> list, File file) throws IOException {
         this.bsbi = bsbi;
         this.listToMerge = list;
         writer = new BufferedWriter(new FileWriter(file));
+        this.resultFile = file;
     }
 
     public void mergeAndWrite() throws IOException {
@@ -57,12 +59,6 @@ public class MergeIndexWriter {
                 if (bsbi.getBlocksFinishedCounter()) {
                     writer.close();
                     readersFinished = true;
-                } else {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
                 }
             }
         }
@@ -87,6 +83,7 @@ public class MergeIndexWriter {
 
     private void writeTermPostingsList(TermPostings termPostingsList) throws IOException {
 
+
         List<Integer> postingsList = new ArrayList<>(termPostingsList.getPostingsList());
         StringBuilder line = new StringBuilder();
         line.append(termPostingsList.getTermId()).append(":");
@@ -95,8 +92,15 @@ public class MergeIndexWriter {
             line.append(docId).append(",");
         }
 
-        writer.write(line.toString());
-        writer.newLine();
+        System.out.println("wrote list: ");
+        writer.write(line.toString() + System.lineSeparator());
+       writer.flush();
 
+
+    }
+
+
+    public File getResultFile() {
+        return resultFile;
     }
 }

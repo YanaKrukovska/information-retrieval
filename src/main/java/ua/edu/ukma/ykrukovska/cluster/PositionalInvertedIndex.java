@@ -4,10 +4,11 @@ package ua.edu.ukma.ykrukovska.cluster;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PositionalInvertedIndex implements Index {
 
-    private HashMap<String, List<Posting>> index;
+    private Map<String, List<Posting>> index;
     private List<String> words;
 
     public PositionalInvertedIndex() {
@@ -22,7 +23,11 @@ public class PositionalInvertedIndex implements Index {
         return words;
     }
 
-    public void addTerm(String term, int documentId, int position) {
+    public Map<String, List<Posting>> getIndex() {
+        return index;
+    }
+
+    public void addTerm(String term, int documentId, int position, int amountOfWords) {
 
         if (index.containsKey(term)) {
 
@@ -32,17 +37,18 @@ public class PositionalInvertedIndex implements Index {
 
                 List<Integer> positions = new ArrayList<>();
                 positions.add(position);
-                mList.add(new Posting(documentId, positions));
+                mList.add(new Posting(documentId, (1 / amountOfWords), positions));
             } else {
 
                 mList.get(mList.size() - 1).addPostingPosition(position);
+                mList.get(mList.size() - 1).setTermFrequency(mList.get(mList.size() - 1).getPositionsInDoc().size() / amountOfWords);
 
             }
         } else {
             List<Posting> mList = new ArrayList<>();
             List<Integer> positions = new ArrayList<>();
             positions.add(position);
-            mList.add(new Posting(documentId, positions));
+            mList.add(new Posting(documentId, (1 / amountOfWords), positions));
             index.put(term, mList);
 
         }
@@ -50,7 +56,7 @@ public class PositionalInvertedIndex implements Index {
 
     @Override
     public List<Posting> getPostings(String term) {
-        if (index.containsKey(term)){
+        if (index.containsKey(term)) {
             return index.get(term);
         }
         return new ArrayList<>();

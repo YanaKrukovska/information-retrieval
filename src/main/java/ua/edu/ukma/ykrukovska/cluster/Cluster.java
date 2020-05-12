@@ -1,6 +1,9 @@
 package ua.edu.ukma.ykrukovska.cluster;
 
 
+import org.apache.lucene.search.CollectionStatistics;
+import org.apache.lucene.search.similarities.BM25Similarity;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -18,6 +21,7 @@ public class Cluster {
     private Map<Integer, DocumentVector> followers;
     private Map<Integer, Double> weights;
     private List<File> files;
+    private Index index;
 
     public Cluster() {
 
@@ -29,6 +33,7 @@ public class Cluster {
     }
 
     public Cluster(File[] files, Index index) {
+        this.index = index;
         this.files = Arrays.asList(files);
         weights = new HashMap<>();
         getNewLeaders(files, index);
@@ -60,18 +65,20 @@ public class Cluster {
         leaderVectors = new HashMap<>();
         followers = new HashMap<>();
 
+
         for (String term : vocabulary) {
             for (Posting posting : index.getPostings(term)) {
+
                 double wdt = 1 + Math.log(posting.getPositionsInDoc().size());
 
                 if (leaders.contains(posting.getDocumentId())) {
-                    addToLeaders(term, posting, wdt, leaderVectors);
+                    add(term, posting, wdt, leaderVectors);
                 } else {
-                    addToLeaders(term, posting, wdt, followers);
+                    add(term, posting, wdt, followers);
                 }
 
                 if (weights.containsKey(posting.getDocumentId())) {
-                    Double weight = weights.get(posting.getDocumentId());
+                    double weight = weights.get(posting.getDocumentId());
                     weight += wdt * wdt;
                     weights.put(posting.getDocumentId(), weight);
                 } else {
@@ -87,7 +94,7 @@ public class Cluster {
         cluster = clusterFollowersToLeaders();
     }
 
-    private void addToLeaders(String term, Posting posting, double wdt, Map<Integer, DocumentVector> leaderVectors) {
+    private void add(String term, Posting posting, double wdt, Map<Integer, DocumentVector> leaderVectors) {
         if (leaderVectors.containsKey(posting.getDocumentId())) {
 
             DocumentVector vector = leaderVectors.get(posting.getDocumentId());
@@ -120,11 +127,11 @@ public class Cluster {
 
 
 
-    private HashMap<Integer, List<Integer>> clusterFollowersToLeaders() {
-        HashMap<Integer, List<Integer>> leaderFollowerMatrix = new HashMap<>();
+    private Map<Integer, List<Integer>> clusterFollowersToLeaders() {
+        Map<Integer, List<Integer>> leaderFollowerMatrix = new HashMap<>();
         for (DocumentVector follower : followers.values()) {
 
-            PriorityQueue<QueryResult> pQ = new PriorityQueue<>(amountOfLeadersForOneFollower, Comparator.comparingDouble(d -> d.dist));
+           Queue<QueryResult> pQ = new PriorityQueue<>(amountOfLeadersForOneFollower, Comparator.comparingDouble(d -> d.dist));
             int leaderID = -1;
             for (DocumentVector leader : leaderVectors.values()) {
 
@@ -145,7 +152,7 @@ public class Cluster {
                     followers.add(follower.getDocumentID());
                     leaderFollowerMatrix.put(leaderID, followers);
                 } else {
-                    ArrayList<Integer> followers = new ArrayList<>();
+                    List<Integer> followers = new ArrayList<>();
                     followers.add(follower.getDocumentID());
                     leaderFollowerMatrix.put(leaderID, followers);
                 }
@@ -156,7 +163,9 @@ public class Cluster {
     }
 
 
-    public PriorityQueue<QueryResult> query(String[] terms) {
+    public Queue<QueryResult> query(String[] terms) {
+
+
 
 
         DocumentVector queryVector = createQueryVector(terms);
@@ -165,6 +174,12 @@ public class Cluster {
         for (Integer docID : leaderVectors.keySet()) {
             DocumentVector leader = leaderVectors.get(docID);
 
+            /////
+            BM25Similarity bm25Similarity = new BM25Similarity();
+           // CollectionStatistics collectionStat = new CollectionStatistics(terms[0], files.size(),index.getIndex().get(terms[0])., index.getPostings(terms[0]).size());
+            //bm25Similarity.idfExplain(collectionStat, termStat);
+
+            ////
             if (!cluster.containsKey(leader.getDocumentID()))
                 continue;
 
@@ -176,7 +191,7 @@ public class Cluster {
 
         }
 
-        PriorityQueue<QueryResult> results = new PriorityQueue<>(50, Comparator.comparingDouble(q -> q.dist));
+        Queue<QueryResult> results = new PriorityQueue<>(50, Comparator.comparingDouble(q -> q.dist));
 
         for (Integer followerID : cluster.get(leaderID)) {
 
@@ -191,6 +206,7 @@ public class Cluster {
 
         }
 
+
         return results;
 
     }
@@ -199,7 +215,7 @@ public class Cluster {
     private DocumentVector createQueryVector(String[] terms) {
 
         DocumentVector vector = new DocumentVector(-1);
-        HashMap<String, Integer> termFreqmap = new HashMap<>();
+        Map<String, Integer> termFreqmap = new HashMap<>();
         for (String term : terms) {
 
             if (termFreqmap.containsKey(term))
